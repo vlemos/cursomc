@@ -5,7 +5,6 @@
  */
 package com.vlemos.cursomc.domain;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,57 +12,35 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 /**
  *
  * @author Vinicius Lemos
  */
-
 @Entity
-public class Categoria implements Serializable{
+public class Produto {
+
     private static final long serialVersionUID = 1L;
 
-    
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy =GenerationType.IDENTITY)
     private Integer id;
     private String nome;
-    
-    
-       @ManyToMany(mappedBy = "categorias")
-    private List<Produto> produtos = new ArrayList();
+    private double preco;
+    @ManyToMany
+    @JoinTable(name = "PRODUTO_CATEGORIA",
+            joinColumns = @JoinColumn(name = "produto_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id")
+            )
+    private List<Categoria> categorias = new ArrayList();
 
-    /**
-     * @return the produtos
-     */
-    public List<Produto> getProdutos() {
-        return produtos;
-    }
-
-    /**
-     * @param produtos the produtos to set
-     */
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
-    }
-    
-
-    
-    public Categoria(Integer id, String nome) {
-        this.id = id;
-        this.nome = nome;
-    }
-
-    public Categoria() {
-    }
-    
-
-    
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 29 * hash + Objects.hashCode(this.id);
+        int hash = 7;
+        hash = 43 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -78,16 +55,13 @@ public class Categoria implements Serializable{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Categoria other = (Categoria) obj;
+        final Produto other = (Produto) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
     }
 
-    
-    
-    
     /**
      * @return the id
      */
@@ -115,5 +89,42 @@ public class Categoria implements Serializable{
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
+
+    /**
+     * @return the preco
+     */
+    public double getPreco() {
+        return preco;
+    }
+
+    /**
+     * @param preco the preco to set
+     */
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
+
+    /**
+     * @return the categorias
+     */
+    public List<Categoria> getCategorias() {
+        return categorias;
+    }
+
+    /**
+     * @param categorias the categorias to set
+     */
+    public void setCategorias(List<Categoria> categorias) {
+        this.categorias = categorias;
+    }
+
+    public Produto() {
+    }
+
+    public Produto(Integer id, String nome, double preco) {
+        this.id = id;
+        this.nome = nome;
+        this.preco = preco;
+    }
+
 }
