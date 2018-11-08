@@ -7,7 +7,9 @@ package com.vlemos.cursomc.services;
 
 import com.vlemos.cursomc.domain.Categoria;
 import com.vlemos.cursomc.repositories.CategoriaRepository;
+import com.vlemos.cursomc.services.expections.ObjectNotFoundException;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +26,8 @@ public class CategoriaService {
     public Categoria buscar(Integer id) {
         Optional<Categoria> obj;
         obj = repo.findById(id);
-        return obj.orElse(null);
+        return obj.orElseThrow(() -> new ObjectNotFoundException(
+                  "Objeto Não encontrado! Id: " + id + " Tipo " + Categoria.class.getName()));
         
     }
 
