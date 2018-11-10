@@ -5,6 +5,7 @@
  */
 package com.vlemos.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vlemos.cursomc.domain.enums.TipoCliente;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class Cliente implements Serializable{
     private String cpfOuCnpj;
     private Integer tipo;
     
+    @JsonManagedReference
     @OneToMany(mappedBy = "cliente")
     private List<Endereco> enderecos = new ArrayList();
     
