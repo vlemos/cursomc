@@ -5,6 +5,7 @@
  */
 package com.vlemos.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vlemos.cursomc.domain.enums.EstadoPagamento;
 import java.util.Date;
 import javax.persistence.Entity;
@@ -17,7 +18,9 @@ import javax.persistence.Entity;
 @Entity
 public class PagamentoComBoleto extends Pagamento{
     private static final long serialVersionUID = 1L;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataVencimento;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataPagamento;
 
     public PagamentoComBoleto() {
