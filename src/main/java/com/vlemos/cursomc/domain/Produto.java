@@ -7,7 +7,9 @@ package com.vlemos.cursomc.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -39,6 +42,17 @@ public class Produto {
             inverseJoinColumns = @JoinColumn(name = "categoria_id")
             )
     private List<Categoria> categorias = new ArrayList();
+
+    @OneToMany(mappedBy = "id.produto")
+    private Set<ItemPedido> itens = new HashSet<>();
+    
+    public List<Pedido> getPedidos(){
+            List<Pedido> lista = new ArrayList();
+            for(ItemPedido x: itens){
+                lista.add(x.getPedido());
+            }
+            return lista;
+    }
 
     @Override
     public int hashCode() {
@@ -127,7 +141,21 @@ public class Produto {
     public Produto(Integer id, String nome, double preco) {
         this.id = id;
         this.nome = nome;
-        this.preco = preco;
+        this.preco =preco;
     }
+
+    /**
+     * @return the itens
+     */
+    public Set<ItemPedido> getItens() {
+        return itens;
+    }
+
+    /**
+     * @param itens the itens to set
+     */
+    public void setItens(Set<ItemPedido> itens) {
+        this.itens = itens;
+     }
 
 }

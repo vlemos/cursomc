@@ -1,0 +1,133 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.vlemos.cursomc.domain;
+
+import java.io.Serializable;
+import java.util.Objects;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+
+/**
+ *
+ * @author Vinicius Lemos
+ */
+
+@Entity
+public class ItemPedido implements Serializable{
+    private static final long serialVersionUID = 1L;
+
+    @EmbeddedId
+private ItemPedidoPK id = new ItemPedidoPK();
+
+private Double desconto;
+private Integer quantidade;
+private double preco;
+
+    public ItemPedido() {
+    }
+
+    public ItemPedido(Pedido pedido, Produto produto, Double desconto, Integer quantidade, double preco) {
+        this.id.setPedido(pedido);
+        this.id.setProduto(produto);
+        this.desconto = desconto;
+        this.quantidade = quantidade;
+        this.preco = preco;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 31 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ItemPedido other = (ItemPedido) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    public Pedido getPedido(){
+        return id.getPedido();
+    }
+    
+    public Produto getProduto(){
+        return id.getProduto();
+    }
+
+    /**
+     * @return the id
+     */
+    public ItemPedidoPK getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(ItemPedidoPK id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the desconto
+     */
+    public Double getDesconto() {
+        return desconto;
+    }
+
+    /**
+     * @param desconto the desconto to set
+     */
+    public void setDesconto(Double desconto) {
+        this.desconto = desconto;
+    }
+
+    /**
+     * @return the quantidade
+     */
+    public Integer getQuantidade() {
+        return quantidade;
+    }
+
+    /**
+     * @param quantidade the quantidade to set
+     */
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    /**
+     * @return the preco
+     */
+    public double getPreco() {
+        return preco;
+    }
+
+    /**
+     * @param preco the preco to set
+     */
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
+
+   
+
+
+
+}
