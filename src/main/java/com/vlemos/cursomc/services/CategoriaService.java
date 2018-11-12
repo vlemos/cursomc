@@ -9,6 +9,7 @@ import com.vlemos.cursomc.domain.Categoria;
 import com.vlemos.cursomc.repositories.CategoriaRepository;
 import com.vlemos.cursomc.services.expections.DataIntegrityException;
 import com.vlemos.cursomc.services.expections.ObjectNotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,10 @@ public class CategoriaService {
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityException("Não é possivel excluir uma categoria que possui produtos");
         }
+    }
+
+    public List<Categoria> findAll() {
+        return repo.findAll();
     }
 
 }
