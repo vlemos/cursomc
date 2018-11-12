@@ -5,7 +5,6 @@
  */
 package com.vlemos.cursomc.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,7 +35,7 @@ public class Produto {
     private String nome;
     private double preco;
     
-    @JsonBackReference // não permite instanciar as catgorias à partir dos produtos. 
+    @JsonIgnore // não permite instanciar as catgorias à partir dos produtos. 
     @ManyToMany
     @JoinTable(name = "PRODUTO_CATEGORIA",
             joinColumns = @JoinColumn(name = "produto_id"),
