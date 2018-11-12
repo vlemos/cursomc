@@ -7,10 +7,12 @@ package com.vlemos.cursomc.services;
 
 import com.vlemos.cursomc.domain.Categoria;
 import com.vlemos.cursomc.repositories.CategoriaRepository;
+import com.vlemos.cursomc.services.expections.DataIntegrityException;
 import com.vlemos.cursomc.services.expections.ObjectNotFoundException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -39,6 +41,15 @@ public class CategoriaService {
     public Categoria update(Categoria obj) {
         find(obj.getId());
         return repo.save(obj);
+    }
+
+    public void delete(Integer id) {
+        find(id);
+        try {
+            repo.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException("Não é possivel excluir uma categoria que possui produtos");
+        }
     }
 
 }
