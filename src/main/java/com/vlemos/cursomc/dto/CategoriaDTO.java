@@ -7,6 +7,8 @@ package com.vlemos.cursomc.dto;
 
 import com.vlemos.cursomc.domain.Categoria;
 import java.io.Serializable;
+import javax.validation.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Length;
 
 /**
  *
@@ -15,7 +17,10 @@ import java.io.Serializable;
 public class CategoriaDTO implements Serializable{
     private static final long serialVersionUID = 1L;
     
-     private Integer id;
+    private Integer id;
+    
+    @NotEmpty(message = "Preenchimento Obrigatorio")
+    @Length(min = 5, max = 80, message = "O Tamanho deve ser entre 5 e 80 Caracteres")
     private String nome;
 
     public CategoriaDTO() {

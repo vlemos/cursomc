@@ -6,6 +6,7 @@
 package com.vlemos.cursomc.services;
 
 import com.vlemos.cursomc.domain.Categoria;
+import com.vlemos.cursomc.dto.CategoriaDTO;
 import com.vlemos.cursomc.repositories.CategoriaRepository;
 import com.vlemos.cursomc.services.expections.DataIntegrityException;
 import com.vlemos.cursomc.services.expections.ObjectNotFoundException;
@@ -66,6 +67,10 @@ public class CategoriaService {
     public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
         PageRequest pageRequest = PageRequest.of(page,linesPerPage,Sort.Direction.valueOf(direction),orderBy);
         return repo.findAll(pageRequest);
+    }
+    
+    public Categoria fromDTO(CategoriaDTO objDto){
+        return new Categoria(objDto.getId(), objDto.getNome());
     }
 
 }
