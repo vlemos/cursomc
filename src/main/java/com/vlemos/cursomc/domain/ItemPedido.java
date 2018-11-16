@@ -88,6 +88,11 @@ private double preco;
         this.id = id;
     }
 
+    
+    public double getSubTotal(){
+        return (preco - desconto)* quantidade;
+    }
+    
     /**
      * @return the desconto
      */
