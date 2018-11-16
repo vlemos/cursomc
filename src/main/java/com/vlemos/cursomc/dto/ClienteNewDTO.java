@@ -5,25 +5,50 @@
  */
 package com.vlemos.cursomc.dto;
 
+import com.vlemos.cursomc.services.validation.ClienteInsert;
 import java.io.Serializable;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Length;
 
 /**
  *
  * @author Vinicius Lemos
  */
+
+@ClienteInsert
 public class ClienteNewDTO implements Serializable{
     
     private static final long serialVersionUID = 1L;
+    
+     @NotEmpty(message = "Preenchimento Obrigatório")
+    @Length(min = 5, max = 120, message = "O tamanho deve ser no minimo de 05 e no maximo 120caracteres")
     private String nome;
+     
+    @NotEmpty(message = "Preenchimento Obrigatório")
+    @Email(message = "Email inválido")
     private String email;
+    
+    // anotações para validar = @CPF @CNPJ
+    @NotEmpty(message = "Preenchimento Obrigatório") 
     private String cpfOuCnpj;
+    
     private Integer tipo;
+    
+    @NotEmpty(message = "Preenchimento Obrigatório")
     private String logradouro;
+    
+    @NotEmpty(message = "Preenchimento Obrigatório")
     private String numero;
     private String complemento;
+    
     private String bairro;
+    @NotEmpty(message = "Preenchimento Obrigatório")
     private String cep;
+    
+    @NotEmpty(message = "Preenchimento Obrigatório")
     private String telefone1;
+    
     private String telefone2;
     private String telefone3;
     private Integer cidadeId;
