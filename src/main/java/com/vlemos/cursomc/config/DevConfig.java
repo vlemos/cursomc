@@ -6,6 +6,8 @@
 package com.vlemos.cursomc.config;
 
 import com.vlemos.cursomc.services.DBService;
+import com.vlemos.cursomc.services.EmailService;
+import com.vlemos.cursomc.services.SmtpEmailService;
 import java.text.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,5 +37,10 @@ public class DevConfig {
         }
         dbService.instantiateDataBase();
         return true;
+    }
+    
+    @Bean
+    public EmailService emailService(){
+        return new SmtpEmailService();
     }
 }
