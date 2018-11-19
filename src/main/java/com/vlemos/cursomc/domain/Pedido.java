@@ -7,8 +7,11 @@ package com.vlemos.cursomc.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -179,6 +182,28 @@ public class Pedido implements Serializable{
      */
     public void setItens(Set<ItemPedido> itens) {
         this.itens = itens;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt","BR") );
+        builder.append("Pedido Numero :");
+        builder.append(getId());
+        builder.append(", instante :");
+        builder.append(sdf.format(getInstante()));
+        builder.append(", Cliente :");
+        builder.append(getCliente().getNome());
+        builder.append(", Situação do Pagamento :");
+        builder.append(getPagamento().getEstado().getDescricao());
+        builder.append("\nDetalhes:\n");
+        for(ItemPedido ip : getItens()){
+            builder.append(ip.toString());
+        }
+        builder.append("Valor total:");
+        builder.append(nf.format(getValorTotal()));
+        return builder.toString();
     }
 
 
