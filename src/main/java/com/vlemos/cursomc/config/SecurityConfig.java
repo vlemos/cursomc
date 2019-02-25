@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -33,6 +34,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
     
     // feito a injeção de uma interface, onde o SpringBoot tem inteligencia de buscar uma classe que implementa esta interface, e injeta-la aqui
@@ -54,6 +56,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         "/produtos/**",
         "/categorias/**"
     };
+     
+          private static final String[] PUBLIC_MATCHES_POST = {
+        "/clientes/**"
+    };
+    
     
     @Override
     public void configure(HttpSecurity http)throws Exception {
@@ -63,6 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         
         http.cors().and().csrf().disable(); // desabilita proteção contra CSRF para aplicações STATELESS, para aplicações sem seção do usuario
         http.authorizeRequests()
+                .antMatchers(HttpMethod.POST, PUBLIC_MATCHES_POST).permitAll() //somente permite GET para esta lista
                 .antMatchers(HttpMethod.GET, PUBLIC_MATCHES_GET).permitAll() //somente permite GET para esta lista
                 .antMatchers(PUBLIC_MATCHES).permitAll() // para esta lista esta tudo liberado
                 .anyRequest().authenticated();
