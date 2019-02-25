@@ -6,6 +6,7 @@
 package com.vlemos.cursomc.config;
 
 import com.vlemos.cursomc.security.JWTAuthenticationFilter;
+import com.vlemos.cursomc.security.JWTAuthorizationFilter;
 import com.vlemos.cursomc.security.JWTUtil;
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -66,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers(PUBLIC_MATCHES).permitAll() // para esta lista esta tudo liberado
                 .anyRequest().authenticated();
         http.addFilter(new JWTAuthenticationFilter(authenticationManager(),jwtUtil));
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(),jwtUtil, userDetailsService));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //garante que não criaremos seção de usuario
     }
     @Bean
