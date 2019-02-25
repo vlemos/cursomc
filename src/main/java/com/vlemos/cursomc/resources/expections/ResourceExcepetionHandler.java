@@ -5,6 +5,7 @@
  */
 package com.vlemos.cursomc.resources.expections;
 
+import com.vlemos.cursomc.services.expections.AuthorizationException;
 import com.vlemos.cursomc.services.expections.DataIntegrityException;
 import com.vlemos.cursomc.services.expections.ObjectNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -45,5 +46,11 @@ public class ResourceExcepetionHandler {
         
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     
+    }
+    
+       @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request) {
+        StandardError err = new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
     }
 }

@@ -8,12 +8,14 @@ package com.vlemos.cursomc.services;
 import com.vlemos.cursomc.domain.Cidade;
 import com.vlemos.cursomc.domain.Cliente;
 import com.vlemos.cursomc.domain.Endereco;
+import com.vlemos.cursomc.domain.enums.Perfil;
 import com.vlemos.cursomc.domain.enums.TipoCliente;
 import com.vlemos.cursomc.dto.ClienteDTO;
 import com.vlemos.cursomc.dto.ClienteNewDTO;
-import com.vlemos.cursomc.repositories.CidadeRepository;
 import com.vlemos.cursomc.repositories.ClienteRepository;
 import com.vlemos.cursomc.repositories.EnderecoRepository;
+import com.vlemos.cursomc.security.UserSS;
+import com.vlemos.cursomc.services.expections.AuthorizationException;
 import com.vlemos.cursomc.services.expections.DataIntegrityException;
 import com.vlemos.cursomc.services.expections.ObjectNotFoundException;
 import java.util.List;
@@ -48,6 +50,11 @@ public class ClienteService {
     
     
     public Cliente find(Integer id) {
+        UserSS user = UserService.authenticated();
+        if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())){
+            throw new AuthorizationException("Acesso Negado");
+        }
+        
         Optional<Cliente> obj;
         obj = repo.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException(
