@@ -5,6 +5,8 @@
  */
 package com.vlemos.cursomc.config;
 
+import com.vlemos.cursomc.security.JWTAuthenticationFilter;
+import com.vlemos.cursomc.security.JWTUtil;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +14,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -29,6 +33,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
+    
+    // feito a injeção de uma interface, onde o SpringBoot tem inteligencia de buscar uma classe que implementa esta interface, e injeta-la aqui
+    // neste caso será a clase UserDetailsServiceImpl
+    @Autowired
+    private UserDetailsService userDetailsService;
+    
+    @Autowired
+    private JWTUtil jwtUtil;
     
     @Autowired
     private Environment env;
@@ -53,6 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers(HttpMethod.GET, PUBLIC_MATCHES_GET).permitAll() //somente permite GET para esta lista
                 .antMatchers(PUBLIC_MATCHES).permitAll() // para esta lista esta tudo liberado
                 .anyRequest().authenticated();
+        http.addFilter(new JWTAuthenticationFilter(authenticationManager(),jwtUtil));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //garante que não criaremos seção de usuario
     }
     @Bean
@@ -65,5 +78,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
-    } 
+    }
+    
+    @Override
+    public void configure(AuthenticationManagerBuilder auth)throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+    }
 }
