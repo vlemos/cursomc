@@ -5,19 +5,26 @@
  */
 package com.vlemos.cursomc.services;
 
+import com.vlemos.cursomc.domain.Cliente;
 import com.vlemos.cursomc.domain.ItemPedido;
 import com.vlemos.cursomc.domain.PagamentoComBoleto;
 import com.vlemos.cursomc.domain.Pedido;
 import com.vlemos.cursomc.domain.Produto;
 import com.vlemos.cursomc.domain.enums.EstadoPagamento;
+import com.vlemos.cursomc.repositories.ClienteRepository;
 import com.vlemos.cursomc.repositories.ItemPedidoRepository;
 import com.vlemos.cursomc.repositories.PagamentoRepository;
 import com.vlemos.cursomc.repositories.PedidoRepository;
+import com.vlemos.cursomc.security.UserSS;
+import com.vlemos.cursomc.services.expections.AuthorizationException;
 import com.vlemos.cursomc.services.expections.ObjectNotFoundException;
 import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +39,7 @@ public class PedidoService {
     private PedidoRepository repo;
     
     @Autowired
-    private BoletoService boletoService; 
+    private BoletoService boletoService;
     
     @Autowired
     private PagamentoRepository pagamentoRepository;
@@ -117,5 +124,20 @@ public class PedidoService {
                 emailService.sendOrderConfirmationHtmlEmail(obj);
 		return obj;
     }
+    
+     /*
+    Retorna todos com paginação
+    */
+    public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
+        UserSS user = UserService.authenticated(); // retorna o usuario logado
+        if (user == null){
+            throw new AuthorizationException("Acesso negado"); // usuario não autenticado
+        }
+        PageRequest pageRequest = PageRequest.of(page,linesPerPage,Sort.Direction.valueOf(direction),orderBy);
+        Cliente cliente = clienteService.find(user.getId());
+        
+        return repo.findByCliente(cliente,pageRequest);
+    }
+    
 
 }
