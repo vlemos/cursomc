@@ -5,6 +5,7 @@
  */
 package com.vlemos.cursomc.services;
 
+import com.vlemos.cursomc.domain.Cliente;
 import com.vlemos.cursomc.domain.Pedido;
 import java.util.Date;
 import java.util.logging.Level;
@@ -70,6 +71,12 @@ public abstract class AbstractEmailService implements EmailService {
         }
                 
     }
+    
+    @Override
+    public void sendNewPasswordEmail(Cliente cliente, String newPass){
+         SimpleMailMessage sm = prepareNewPasswordEmail(cliente,newPass);
+        sendEmail(sm);
+    }
 
     protected MimeMessage prepareMimeMessageFromPedido(Pedido obj) throws MessagingException {
         MimeMessage mimiMessage = javaMailSender.createMimeMessage();
@@ -80,6 +87,16 @@ public abstract class AbstractEmailService implements EmailService {
         mmh.setSentDate(new Date(System.currentTimeMillis()));
         mmh.setText(htmlFromTemplatePedido(obj),true);
         return mimiMessage;
+    }
+
+    protected SimpleMailMessage prepareNewPasswordEmail(Cliente cliente, String newPass) {
+        SimpleMailMessage sm = new SimpleMailMessage();
+        sm.setTo(cliente.getEmail());
+        sm.setFrom(sender);
+        sm.setSubject("Solicitação de Nova Senha");
+        sm.setSentDate(new Date(System.currentTimeMillis()));
+        sm.setText("Nova Senha : " + newPass);
+        return sm;
     }
     
 }
