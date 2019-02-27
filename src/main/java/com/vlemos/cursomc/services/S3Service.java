@@ -10,6 +10,7 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.vlemos.cursomc.services.expections.FileException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,7 +50,7 @@ public class S3Service {
             return uploadFile(is, fileName, contentType);
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(S3Service.class.getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException("Erro de IO " + ex.getMessage());
+            throw new FileException("Erro de IO " + ex.getMessage());
 
         }
 
@@ -67,7 +68,7 @@ public class S3Service {
             
         } catch (URISyntaxException ex) {
             java.util.logging.Logger.getLogger(S3Service.class.getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException("Erro convertendo URL para URI");
+            throw new FileException("Erro convertendo URL para URI");
         }
 
     }
